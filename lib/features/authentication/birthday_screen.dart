@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tiktok_flutter/contants/gaps.dart';
 import 'package:tiktok_flutter/contants/sizes.dart';
-import 'package:tiktok_flutter/features/authentication/login_form_screen.dart';
 import 'package:tiktok_flutter/features/authentication/widgets/form_button.dart';
+import 'package:tiktok_flutter/features/onboarding/interests_screen.dart';
 
 class BirthdayScreen extends StatefulWidget {
   const BirthdayScreen({super.key});
@@ -33,7 +33,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
 
   void _onNextTap() {
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => const LoginFormScreen(),
+      builder: (context) => const InterestsScreen(),
     ));
   }
 
