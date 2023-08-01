@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tiktok_flutter/contants/sizes.dart';
+import 'package:tiktok_flutter/constants/sizes.dart';
 import 'package:tiktok_flutter/features/main/main_screen.dart';
 
 void main() {

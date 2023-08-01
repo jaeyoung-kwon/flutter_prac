@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:tiktok_flutter/contants/gaps.dart';
-import 'package:tiktok_flutter/contants/sizes.dart';
+import 'package:tiktok_flutter/constants/gaps.dart';
+import 'package:tiktok_flutter/constants/sizes.dart';
 import 'package:tiktok_flutter/features/main/widgets/navigation_tab.dart';
 import 'package:tiktok_flutter/features/main/widgets/post_video_button.dart';
 import 'package:tiktok_flutter/features/videos/video_timeline_screen.dart';
