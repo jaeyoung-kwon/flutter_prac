@@ -10,6 +10,7 @@ class NavigationTab extends StatelessWidget {
     required this.icon,
     required this.onTap,
     required this.selectedIcon,
+    required this.isSelectedMainIndex,
   });
 
   final String text;
@@ -17,6 +18,7 @@ class NavigationTab extends StatelessWidget {
   final IconData icon;
   final IconData selectedIcon;
   final Function onTap;
+  final bool isSelectedMainIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +34,13 @@ class NavigationTab extends StatelessWidget {
             children: [
               FaIcon(
                 isSelected ? selectedIcon : icon,
-                color: Colors.white,
+                color: isSelectedMainIndex ? Colors.white : Colors.black,
               ),
               Gaps.v4,
               Text(
                 text,
-                style: const TextStyle(
-                  color: Colors.white,
+                style: TextStyle(
+                  color: isSelectedMainIndex ? Colors.white : Colors.black,
                 ),
               ),
             ],

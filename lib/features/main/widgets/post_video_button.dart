@@ -5,7 +5,10 @@ import 'package:tiktok_flutter/constants/sizes.dart';
 class PostVideoButton extends StatelessWidget {
   const PostVideoButton({
     super.key,
+    required this.isSelectedMainIndex,
   });
+
+  final bool isSelectedMainIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +49,13 @@ class PostVideoButton extends StatelessWidget {
             horizontal: Sizes.size10,
           ),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: isSelectedMainIndex ? Colors.white : Colors.black,
             borderRadius: BorderRadius.circular(Sizes.size10),
           ),
-          child: const Center(
+          child: Center(
             child: FaIcon(
               FontAwesomeIcons.plus,
-              color: Colors.black,
+              color: isSelectedMainIndex ? Colors.black : Colors.white,
               size: Sizes.size20,
             ),
           ),

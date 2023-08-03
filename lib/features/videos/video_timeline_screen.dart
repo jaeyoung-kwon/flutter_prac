@@ -38,14 +38,6 @@ class _VideoTimelineScreenState extends State<VideoTimelineScreen> {
     }
   }
 
-  void _onVideoFinished() {
-    return;
-    _pageController.nextPage(
-      duration: _videoDuration,
-      curve: _videoCurve,
-    );
-  }
-
   @override
   void dispose() {
     super.dispose();
@@ -70,7 +62,7 @@ class _VideoTimelineScreenState extends State<VideoTimelineScreen> {
         onPageChanged: _onPageChanged,
         itemCount: colors.length,
         itemBuilder: (context, index) {
-          return VideoPost(onVideoFinished: _onVideoFinished, index: index);
+          return VideoPost(index: index);
         },
       ),
     );

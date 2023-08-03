@@ -89,17 +89,25 @@ class _VideoPostState extends State<VideoPost>
     _onToggleTap();
   }
 
+  void _onVisibilityChanged(VisibilityInfo info) {
+    if (info.visibleFraction == 1 &&
+        !_isPaused &&
+        !_videoPlayerController.value.isPlaying) {
+      _videoPlayerController.play();
+    }
+
+    if (_videoPlayerController.value.isPlaying &&
+        info.visibleFraction == 0 &&
+        !_isPaused) {
+      _onToggleTap();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return VisibilityDetector(
       key: Key(widget.index.toString()),
-      onVisibilityChanged: (visibilityInfo) {
-        if (visibilityInfo.visibleFraction == 1 &&
-            !_isPaused &&
-            !_videoPlayerController.value.isPlaying) {
-          _videoPlayerController.play();
-        }
-      },
+      onVisibilityChanged: _onVisibilityChanged,
       child: Stack(
         children: [
           Positioned.fill(
