@@ -6,6 +6,7 @@ import 'package:tiktok_flutter/features/discover/discover_screen.dart';
 import 'package:tiktok_flutter/features/inbox/inbox_screen.dart';
 import 'package:tiktok_flutter/features/main/widgets/navigation_tab.dart';
 import 'package:tiktok_flutter/features/main/widgets/post_video_button.dart';
+import 'package:tiktok_flutter/features/users/user_profile_screen.dart';
 import 'package:tiktok_flutter/features/videos/video_timeline_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -16,7 +17,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _selectedIndex = 3;
+  int _selectedIndex = 4;
   bool _isSelectedMainIndex = true;
 
   void _onTap(int index) {
@@ -61,7 +62,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
           Offstage(
             offstage: _selectedIndex != 4,
-            child: Container(),
+            child: const UserProfileScreen(),
           ),
         ],
       ),
