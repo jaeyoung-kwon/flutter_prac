@@ -17,7 +17,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _selectedIndex = 4;
+  int _selectedIndex = 1;
   bool _isSelectedMainIndex = true;
 
   void _onTap(int index) {
