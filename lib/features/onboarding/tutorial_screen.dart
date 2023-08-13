@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:tiktok_flutter/constants/gaps.dart';
 import 'package:tiktok_flutter/constants/sizes.dart';
 import 'package:tiktok_flutter/features/main/main_screen.dart';
+import 'package:tiktok_flutter/utils.dart';
 
-enum Direction { left, right }
+enum Direction { right, left }
 
 enum Page { first, second }
 
@@ -16,8 +17,7 @@ class TutorialScreen extends StatefulWidget {
 }
 
 class _TutorialScreenState extends State<TutorialScreen> {
-  Direction _direction = Direction.left;
-
+  Direction _direction = Direction.right;
   Page _showingPage = Page.first;
 
   void _onPanUpdate(DragUpdateDetails details) {
@@ -32,21 +32,20 @@ class _TutorialScreenState extends State<TutorialScreen> {
     }
   }
 
-  void _onPanEnd(DragEndDetails details) {
-    if (_direction == Direction.right) {
+  void _onPanEnd(DragEndDetails detail) {
+    if (_direction == Direction.left) {
       setState(() {
-        _showingPage = Page.first;
+        _showingPage = Page.second;
       });
     } else {
       setState(() {
-        _showingPage = Page.second;
+        _showingPage = Page.first;
       });
     }
   }
 
-  void _onTap() {
-    Navigator.pushAndRemoveUntil(
-      context,
+  void _onEnterAppTap() {
+    Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (context) => const MainScreen(),
       ),
@@ -61,71 +60,70 @@ class _TutorialScreenState extends State<TutorialScreen> {
       onPanEnd: _onPanEnd,
       child: Scaffold(
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: Sizes.size20),
+          padding: const EdgeInsets.symmetric(horizontal: Sizes.size24),
           child: SafeArea(
             child: AnimatedCrossFade(
               firstChild: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Gaps.v80,
-                  Text(
-                    "Watch cool videos!",
-                    style: TextStyle(
-                      fontSize: Sizes.size36,
-                      fontWeight: FontWeight.w600,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Gaps.v80,
+                    Text(
+                      "Watch cool videos!",
+                      style: TextStyle(
+                        fontSize: Sizes.size40,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  Gaps.v16,
-                  Text(
-                    "Videos are personalized for you based on what you watch, like and share.",
-                    style: TextStyle(
-                      fontSize: Sizes.size16,
-                    ),
-                  ),
-                ],
-              ),
+                    Gaps.v16,
+                    Text(
+                      "Videos are personalized for you based on what you watch, like, and share.",
+                      style: TextStyle(
+                        fontSize: Sizes.size20,
+                      ),
+                    )
+                  ]),
               secondChild: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Gaps.v80,
-                  Text(
-                    "Follow the rules!",
-                    style: TextStyle(
-                      fontSize: Sizes.size36,
-                      fontWeight: FontWeight.w600,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Gaps.v80,
+                    Text(
+                      "Follow the rules",
+                      style: TextStyle(
+                        fontSize: Sizes.size40,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  Gaps.v16,
-                  Text(
-                    "Videos are personalized for you based on what you watch, like and share.",
-                    style: TextStyle(
-                      fontSize: Sizes.size16,
-                    ),
-                  ),
-                ],
-              ),
+                    Gaps.v16,
+                    Text(
+                      "Videos are personalized for you based on what you watch, like, and share.",
+                      style: TextStyle(
+                        fontSize: Sizes.size20,
+                      ),
+                    )
+                  ]),
               crossFadeState: _showingPage == Page.first
                   ? CrossFadeState.showFirst
                   : CrossFadeState.showSecond,
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 300),
             ),
           ),
         ),
         bottomNavigationBar: BottomAppBar(
+          color: isDarkMode(context) ? Colors.black : Colors.white,
           child: Padding(
-            padding: const EdgeInsets.all(
-              Sizes.size24,
-            ),
-            child: AnimatedOpacity(
-              opacity: _showingPage == Page.second ? 1 : 0,
-              duration: const Duration(milliseconds: 200),
-              child: CupertinoButton(
-                onPressed: _onTap,
-                color: Theme.of(context).primaryColor,
-                child: const Text("Enter the app"),
+              padding: const EdgeInsets.symmetric(
+                vertical: Sizes.size24,
+                horizontal: Sizes.size24,
               ),
-            ),
-          ),
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 300),
+                opacity: _showingPage == Page.first ? 0 : 1,
+                child: CupertinoButton(
+                  onPressed: _onEnterAppTap,
+                  color: Theme.of(context).primaryColor,
+                  child: const Text('Enter the app!'),
+                ),
+              )),
         ),
       ),
     );

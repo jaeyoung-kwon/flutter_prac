@@ -58,7 +58,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
   bool _showTitle = false;
 
   void _onScroll() {
-    if (_scrollController.offset > 115) {
+    if (_scrollController.offset > 100) {
       if (_showTitle) return;
       setState(() {
         _showTitle = true;
@@ -70,25 +70,25 @@ class _InterestsScreenState extends State<InterestsScreen> {
     }
   }
 
+  void _onNextTap() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const TutorialScreen(),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
-
     _scrollController.addListener(_onScroll);
   }
 
   @override
   void dispose() {
-    super.dispose();
-
     _scrollController.dispose();
-  }
-
-  void _onNextTap() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const TutorialScreen()),
-    );
+    super.dispose();
   }
 
   @override
@@ -97,10 +97,8 @@ class _InterestsScreenState extends State<InterestsScreen> {
       appBar: AppBar(
         title: AnimatedOpacity(
           opacity: _showTitle ? 1 : 0,
-          duration: const Duration(milliseconds: 200),
-          child: const Text(
-            'Choose your interests',
-          ),
+          duration: const Duration(milliseconds: 300),
+          child: const Text("Choose your interests"),
         ),
       ),
       body: Scrollbar(
@@ -121,26 +119,25 @@ class _InterestsScreenState extends State<InterestsScreen> {
                   "Choose your interests",
                   style: TextStyle(
                     fontSize: Sizes.size40,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                Gaps.v24,
+                Gaps.v20,
                 const Text(
                   "Get better video recommendations",
                   style: TextStyle(
                     fontSize: Sizes.size20,
-                    color: Colors.black54,
                   ),
                 ),
-                Gaps.v64,
+                Gaps.v48,
                 Wrap(
-                  runSpacing: Sizes.size10,
-                  spacing: Sizes.size10,
+                  runSpacing: 15,
+                  spacing: 15,
                   children: [
                     for (var interest in interests)
                       InterestButton(interest: interest)
                   ],
-                ),
+                )
               ],
             ),
           ),
@@ -148,29 +145,29 @@ class _InterestsScreenState extends State<InterestsScreen> {
       ),
       bottomNavigationBar: BottomAppBar(
         elevation: 2,
-        child: GestureDetector(
-          onTap: _onNextTap,
-          child: Padding(
-            padding: const EdgeInsets.only(
-              bottom: Sizes.size40,
-              top: Sizes.size16,
-              left: Sizes.size24,
-              right: Sizes.size24,
-            ),
+        child: Padding(
+          padding: const EdgeInsets.only(
+            bottom: Sizes.size40,
+            top: Sizes.size16,
+            left: Sizes.size24,
+            right: Sizes.size24,
+          ),
+          child: GestureDetector(
+            onTap: _onNextTap,
             child: Container(
               padding: const EdgeInsets.symmetric(
-                vertical: Sizes.size20,
+                vertical: Sizes.size16 + Sizes.size2,
               ),
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor,
               ),
               child: const Text(
-                "Next",
+                'Next',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
+                  fontWeight: FontWeight.w500,
                   fontSize: Sizes.size16,
-                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),

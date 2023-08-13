@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_flutter/constants/gaps.dart';
 import 'package:tiktok_flutter/constants/sizes.dart';
+import 'package:tiktok_flutter/utils.dart';
 
 class ActivityScreen extends StatefulWidget {
   const ActivityScreen({super.key});
@@ -13,8 +14,6 @@ class ActivityScreen extends StatefulWidget {
 class _ActivityScreenState extends State<ActivityScreen>
     with SingleTickerProviderStateMixin {
   final List<String> _notifications = List.generate(20, (index) => "${index}h");
-
-  bool _showBarrier = false;
 
   final List<Map<String, dynamic>> _tabs = [
     {
@@ -43,15 +42,15 @@ class _ActivityScreenState extends State<ActivityScreen>
     }
   ];
 
+  bool _showBarrier = false;
+
   late final AnimationController _animationController = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 300),
+    duration: const Duration(milliseconds: 200),
   );
 
-  late final Animation<double> _arrowAnimation = Tween(
-    begin: 0.0,
-    end: 0.5,
-  ).animate(_animationController);
+  late final Animation<double> _arrowAnimation =
+      Tween(begin: 0.0, end: 0.5).animate(_animationController);
 
   late final Animation<Offset> _panelAnimation = Tween(
     begin: const Offset(0, -1),
@@ -60,7 +59,7 @@ class _ActivityScreenState extends State<ActivityScreen>
 
   late final Animation<Color?> _barrierAnimation = ColorTween(
     begin: Colors.transparent,
-    end: Colors.black.withOpacity(0.5),
+    end: Colors.black38,
   ).animate(_animationController);
 
   void _onDismissed(String notification) {
@@ -68,7 +67,7 @@ class _ActivityScreenState extends State<ActivityScreen>
     setState(() {});
   }
 
-  void _toggleAnimation() async {
+  void _toggleAnimations() async {
     if (_animationController.isCompleted) {
       await _animationController.reverse();
     } else {
@@ -81,11 +80,18 @@ class _ActivityScreenState extends State<ActivityScreen>
   }
 
   @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final isDark = isDarkMode(context);
     return Scaffold(
       appBar: AppBar(
         title: GestureDetector(
-          onTap: _toggleAnimation,
+          onTap: _toggleAnimations,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -159,27 +165,27 @@ class _ActivityScreenState extends State<ActivityScreen>
                       width: Sizes.size52,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.white,
+                        color: isDark ? Colors.grey.shade800 : Colors.white,
                         border: Border.all(
-                          color: Colors.grey.shade400,
+                          color: isDark
+                              ? Colors.grey.shade800
+                              : Colors.grey.shade400,
                           width: Sizes.size1,
                         ),
                       ),
                       child: const Center(
                         child: FaIcon(
                           FontAwesomeIcons.bell,
-                          color: Colors.black,
                         ),
                       ),
                     ),
                     title: RichText(
                       text: TextSpan(
                         text: "Account updates:",
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                          fontSize: Sizes.size16,
-                        ),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: Sizes.size16,
+                            color: isDark ? null : Colors.black),
                         children: [
                           const TextSpan(
                             text: " Upload longer videos",
@@ -209,17 +215,21 @@ class _ActivityScreenState extends State<ActivityScreen>
             AnimatedModalBarrier(
               color: _barrierAnimation,
               dismissible: true,
-              onDismiss: _toggleAnimation,
+              onDismiss: _toggleAnimations,
             ),
           SlideTransition(
             position: _panelAnimation,
             child: Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(Sizes.size6),
-                  bottomRight: Radius.circular(Sizes.size6),
+              decoration: BoxDecoration(
+                color: Theme.of(context).appBarTheme.backgroundColor,
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(
+                    Sizes.size5,
+                  ),
+                  bottomRight: Radius.circular(
+                    Sizes.size5,
+                  ),
                 ),
-                color: Colors.white,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -228,9 +238,8 @@ class _ActivityScreenState extends State<ActivityScreen>
                     ListTile(
                       title: Row(
                         children: [
-                          FaIcon(
+                          Icon(
                             tab["icon"],
-                            color: Colors.black,
                             size: Sizes.size16,
                           ),
                           Gaps.h20,
@@ -239,10 +248,10 @@ class _ActivityScreenState extends State<ActivityScreen>
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
-                          )
+                          ),
                         ],
                       ),
-                    )
+                    ),
                 ],
               ),
             ),

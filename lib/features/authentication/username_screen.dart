@@ -19,7 +19,6 @@ class _UsernameScreenState extends State<UsernameScreen> {
   @override
   void initState() {
     super.initState();
-
     _usernameController.addListener(() {
       setState(() {
         _username = _usernameController.text;
@@ -29,19 +28,17 @@ class _UsernameScreenState extends State<UsernameScreen> {
 
   @override
   void dispose() {
-    super.dispose();
-
     _usernameController.dispose();
+    super.dispose();
   }
 
   void _onNextTap() {
-    if (_username.isEmpty) {
-      return;
-    }
-
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => const EmailScreen(),
-    ));
+    if (_username.isEmpty) return;
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const EmailScreen(),
+      ),
+    );
   }
 
   @override
@@ -49,11 +46,13 @@ class _UsernameScreenState extends State<UsernameScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Sign up',
+          "Sign up",
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: Sizes.size32),
+        padding: const EdgeInsets.symmetric(
+          horizontal: Sizes.size36,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -61,8 +60,8 @@ class _UsernameScreenState extends State<UsernameScreen> {
             const Text(
               "Create username",
               style: TextStyle(
-                fontSize: Sizes.size20,
-                fontWeight: FontWeight.w600,
+                fontSize: Sizes.size24,
+                fontWeight: FontWeight.w700,
               ),
             ),
             Gaps.v8,
@@ -76,7 +75,6 @@ class _UsernameScreenState extends State<UsernameScreen> {
             Gaps.v16,
             TextField(
               controller: _usernameController,
-              cursorColor: Theme.of(context).primaryColor,
               decoration: InputDecoration(
                 hintText: "Username",
                 enabledBorder: UnderlineInputBorder(
@@ -90,13 +88,12 @@ class _UsernameScreenState extends State<UsernameScreen> {
                   ),
                 ),
               ),
+              cursorColor: Theme.of(context).primaryColor,
             ),
-            Gaps.v16,
+            Gaps.v28,
             GestureDetector(
-              onTap: () => _onNextTap(),
-              child: FormButton(
-                disabled: _username.isEmpty,
-              ),
+              onTap: _onNextTap,
+              child: FormButton(disabled: _username.isEmpty),
             ),
           ],
         ),

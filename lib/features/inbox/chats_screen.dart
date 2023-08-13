@@ -15,7 +15,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
 
   final List<int> _items = [];
 
-  final Duration _duration = const Duration(milliseconds: 500);
+  final Duration _duration = const Duration(milliseconds: 300);
 
   void _addItem() {
     if (_key.currentState != null) {
@@ -33,7 +33,10 @@ class _ChatsScreenState extends State<ChatsScreen> {
         index,
         (context, animation) => SizeTransition(
           sizeFactor: animation,
-          child: _makeTile(index),
+          child: Container(
+            color: Colors.red,
+            child: _makeTile(index),
+          ),
         ),
         duration: _duration,
       );
@@ -101,12 +104,10 @@ class _ChatsScreenState extends State<ChatsScreen> {
         ),
         itemBuilder: (context, index, animation) {
           return FadeTransition(
-            key: UniqueKey(),
+            key: Key('$index'),
             opacity: animation,
-            child: SizeTransition(
-              sizeFactor: animation,
-              child: _makeTile(index),
-            ),
+            child:
+                SizeTransition(sizeFactor: animation, child: _makeTile(index)),
           );
         },
       ),

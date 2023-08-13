@@ -7,6 +7,7 @@ import 'package:tiktok_flutter/features/inbox/inbox_screen.dart';
 import 'package:tiktok_flutter/features/main/widgets/navigation_tab.dart';
 import 'package:tiktok_flutter/features/main/widgets/post_video_button.dart';
 import 'package:tiktok_flutter/features/users/user_profile_screen.dart';
+import 'package:tiktok_flutter/utils.dart';
 import 'package:tiktok_flutter/features/videos/video_timeline_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -43,9 +44,11 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = isDarkMode(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: _isSelectedMainIndex ? Colors.black : Colors.white,
+      backgroundColor:
+          _isSelectedMainIndex || isDark ? Colors.black : Colors.white,
       body: Stack(
         children: [
           Offstage(
@@ -67,7 +70,7 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
       bottomNavigationBar: BottomAppBar(
-        color: _isSelectedMainIndex ? Colors.black : Colors.white,
+        color: _isSelectedMainIndex || isDark ? Colors.black : Colors.white,
         child: Padding(
           padding: const EdgeInsets.all(Sizes.size12),
           child: Row(

@@ -9,10 +9,15 @@ import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class VideoPost extends StatefulWidget {
-  final onVideoFinished;
-  final index;
+  final Function onVideoFinished;
 
-  const VideoPost({super.key, this.onVideoFinished, this.index});
+  final int index;
+
+  const VideoPost({
+    super.key,
+    required this.onVideoFinished,
+    required this.index,
+  });
 
   @override
   State<VideoPost> createState() => _VideoPostState();
@@ -20,8 +25,9 @@ class VideoPost extends StatefulWidget {
 
 class _VideoPostState extends State<VideoPost>
     with SingleTickerProviderStateMixin {
-  final VideoPlayerController _videoPlayerController =
-      VideoPlayerController.asset("assets/videos/video.mp4");
+  late final VideoPlayerController _videoPlayerController;
+
+  final Duration _animationDuration = const Duration(milliseconds: 200);
 
   late final AnimationController _animationController;
 
@@ -37,6 +43,8 @@ class _VideoPostState extends State<VideoPost>
   }
 
   void _initVideoPlayer() async {
+    _videoPlayerController =
+        VideoPlayerController.asset("assets/videos/video.mp4");
     await _videoPlayerController.initialize();
     await _videoPlayerController.setLooping(true);
     if (kIsWeb) {
@@ -56,17 +64,30 @@ class _VideoPostState extends State<VideoPost>
       lowerBound: 1.0,
       upperBound: 1.5,
       value: 1.5,
-      duration: const Duration(milliseconds: 200),
+      duration: _animationDuration,
     );
   }
 
   @override
   void dispose() {
-    super.dispose();
     _videoPlayerController.dispose();
+    _animationController.dispose();
+    super.dispose();
   }
 
-  void _onToggleTap() {
+  void _onVisibilityChanged(VisibilityInfo info) {
+    if (!mounted) return;
+    if (info.visibleFraction == 1 &&
+        !_isPaused &&
+        !_videoPlayerController.value.isPlaying) {
+      _videoPlayerController.play();
+    }
+    if (_videoPlayerController.value.isPlaying && info.visibleFraction == 0) {
+      _onTogglePause();
+    }
+  }
+
+  void _onTogglePause() {
     if (_videoPlayerController.value.isPlaying) {
       _videoPlayerController.pause();
       _animationController.reverse();
@@ -81,37 +102,21 @@ class _VideoPostState extends State<VideoPost>
 
   void _onCommentsTap(BuildContext context) async {
     if (_videoPlayerController.value.isPlaying) {
-      _onToggleTap();
+      _onTogglePause();
     }
     await showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.transparent,
       isScrollControlled: true,
+      backgroundColor: Colors.transparent,
       builder: (context) => const VideoComments(),
     );
-
-    _onToggleTap();
-  }
-
-  void _onVisibilityChanged(VisibilityInfo info) {
-    if (!mounted) return;
-    if (info.visibleFraction == 1 &&
-        !_isPaused &&
-        !_videoPlayerController.value.isPlaying) {
-      _videoPlayerController.play();
-    }
-
-    if (_videoPlayerController.value.isPlaying &&
-        info.visibleFraction == 0 &&
-        !_isPaused) {
-      _onToggleTap();
-    }
+    _onTogglePause();
   }
 
   @override
   Widget build(BuildContext context) {
     return VisibilityDetector(
-      key: Key(widget.index.toString()),
+      key: Key("${widget.index}"),
       onVisibilityChanged: _onVisibilityChanged,
       child: Stack(
         children: [
@@ -119,12 +124,12 @@ class _VideoPostState extends State<VideoPost>
             child: _videoPlayerController.value.isInitialized
                 ? VideoPlayer(_videoPlayerController)
                 : Container(
-                    color: Colors.red,
+                    color: Colors.black,
                   ),
           ),
           Positioned.fill(
             child: GestureDetector(
-              onTap: _onToggleTap,
+              onTap: _onTogglePause,
             ),
           ),
           Positioned.fill(
@@ -140,7 +145,7 @@ class _VideoPostState extends State<VideoPost>
                   },
                   child: AnimatedOpacity(
                     opacity: _isPaused ? 1 : 0,
-                    duration: const Duration(milliseconds: 100),
+                    duration: _animationDuration,
                     child: const FaIcon(
                       FontAwesomeIcons.play,
                       color: Colors.white,

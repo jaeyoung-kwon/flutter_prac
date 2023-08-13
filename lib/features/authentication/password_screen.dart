@@ -16,12 +16,12 @@ class _PasswordScreenState extends State<PasswordScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
   String _password = "";
-  bool _isObscure = true;
+
+  bool _obscureText = true;
 
   @override
   void initState() {
     super.initState();
-
     _passwordController.addListener(() {
       setState(() {
         _password = _passwordController.text;
@@ -31,15 +31,12 @@ class _PasswordScreenState extends State<PasswordScreen> {
 
   @override
   void dispose() {
-    super.dispose();
-
     _passwordController.dispose();
+    super.dispose();
   }
 
   bool _isPasswordValid() {
-    return _password.isNotEmpty &&
-        _password.length >= 8 &&
-        _password.length <= 20;
+    return _password.isNotEmpty && _password.length > 8;
   }
 
   void _onScaffoldTap() {
@@ -60,24 +57,25 @@ class _PasswordScreenState extends State<PasswordScreen> {
     _passwordController.clear();
   }
 
-  void _onEyeTap() {
-    setState(() {
-      _isObscure = !_isObscure;
-    });
+  void _toggleObscureText() {
+    _obscureText = !_obscureText;
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => _onScaffoldTap(),
+      onTap: _onScaffoldTap,
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
-            'Sign up',
+            "Sign up",
           ),
         ),
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: Sizes.size32),
+          padding: const EdgeInsets.symmetric(
+            horizontal: Sizes.size36,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -85,17 +83,16 @@ class _PasswordScreenState extends State<PasswordScreen> {
               const Text(
                 "Password",
                 style: TextStyle(
-                  fontSize: Sizes.size20,
-                  fontWeight: FontWeight.w600,
+                  fontSize: Sizes.size24,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
               Gaps.v16,
               TextField(
                 controller: _passwordController,
                 onEditingComplete: _onSubmit,
-                obscureText: _isObscure,
+                obscureText: _obscureText,
                 autocorrect: false,
-                cursorColor: Theme.of(context).primaryColor,
                 decoration: InputDecoration(
                   suffix: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -104,18 +101,18 @@ class _PasswordScreenState extends State<PasswordScreen> {
                         onTap: _onClearTap,
                         child: FaIcon(
                           FontAwesomeIcons.solidCircleXmark,
-                          color: Colors.grey.shade400,
+                          color: Colors.grey.shade500,
                           size: Sizes.size20,
                         ),
                       ),
-                      Gaps.h10,
+                      Gaps.h16,
                       GestureDetector(
-                        onTap: _onEyeTap,
+                        onTap: _toggleObscureText,
                         child: FaIcon(
-                          _isObscure
-                              ? FontAwesomeIcons.eyeSlash
-                              : FontAwesomeIcons.eye,
-                          color: Colors.grey.shade400,
+                          _obscureText
+                              ? FontAwesomeIcons.eye
+                              : FontAwesomeIcons.eyeSlash,
+                          color: Colors.grey.shade500,
                           size: Sizes.size20,
                         ),
                       ),
@@ -133,11 +130,14 @@ class _PasswordScreenState extends State<PasswordScreen> {
                     ),
                   ),
                 ),
+                cursorColor: Theme.of(context).primaryColor,
               ),
               Gaps.v10,
               const Text(
-                "Your password must have:",
-                style: TextStyle(fontWeight: FontWeight.w600),
+                'Your password must have:',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               Gaps.v10,
               Row(
@@ -150,10 +150,10 @@ class _PasswordScreenState extends State<PasswordScreen> {
                         : Colors.grey.shade400,
                   ),
                   Gaps.h5,
-                  const Text("8 to 20 characters"),
+                  const Text("8 to 20 characters")
                 ],
               ),
-              Gaps.v16,
+              Gaps.v28,
               GestureDetector(
                 onTap: _onSubmit,
                 child: FormButton(

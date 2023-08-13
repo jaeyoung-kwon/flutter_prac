@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:tiktok_flutter/constants/sizes.dart';
+import 'package:tiktok_flutter/utils.dart';
+import '../../../constants/sizes.dart';
 
 class InterestButton extends StatefulWidget {
   const InterestButton({
-    super.key,
+    Key? key,
     required this.interest,
-  });
+  }) : super(key: key);
 
   final String interest;
 
@@ -27,34 +28,36 @@ class _InterestButtonState extends State<InterestButton> {
     return GestureDetector(
       onTap: _onTap,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
+        duration: const Duration(milliseconds: 300),
         padding: const EdgeInsets.symmetric(
-          horizontal: Sizes.size20,
           vertical: Sizes.size16,
+          horizontal: Sizes.size24,
         ),
         decoration: BoxDecoration(
-          color: _isSelected ? Theme.of(context).primaryColor : Colors.white,
-          borderRadius: BorderRadius.circular(Sizes.size32),
+          color: _isSelected
+              ? Theme.of(context).primaryColor
+              : isDarkMode(context)
+                  ? Colors.grey.shade700
+                  : Colors.white,
+          borderRadius: BorderRadius.circular(
+            Sizes.size32,
+          ),
           border: Border.all(
             color: Colors.black.withOpacity(0.1),
           ),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
-              blurRadius: Sizes.size5,
-              spreadRadius: Sizes.size5,
+              blurRadius: 5,
+              spreadRadius: 5,
             ),
           ],
         ),
-        child: AnimatedDefaultTextStyle(
-          duration: const Duration(milliseconds: 200),
+        child: Text(
+          widget.interest,
           style: TextStyle(
-            fontWeight: FontWeight.w600,
-            color: _isSelected ? Colors.white : Colors.black87,
-          ),
-          child: Text(
-            widget.interest,
-          ),
+              fontWeight: FontWeight.bold,
+              color: _isSelected ? Colors.white : Colors.black87),
         ),
       ),
     );

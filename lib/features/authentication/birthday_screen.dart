@@ -15,25 +15,22 @@ class BirthdayScreen extends StatefulWidget {
 class _BirthdayScreenState extends State<BirthdayScreen> {
   final TextEditingController _birthdayController = TextEditingController();
 
-  final DateTime _birthday = DateTime.now();
+  DateTime initialDate = DateTime.now();
 
   @override
   void initState() {
     super.initState();
-
-    _setTextFieldDate(_birthday);
+    _setTextFieldDate(initialDate);
   }
 
   @override
   void dispose() {
-    super.dispose();
-
     _birthdayController.dispose();
+    super.dispose();
   }
 
   void _onNextTap() {
-    Navigator.pushAndRemoveUntil(
-      context,
+    Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (context) => const InterestsScreen(),
       ),
@@ -42,7 +39,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
   }
 
   void _setTextFieldDate(DateTime date) {
-    final textDate = date.toString().split(' ').first;
+    final textDate = date.toString().split(" ").first;
     _birthdayController.value = TextEditingValue(text: textDate);
   }
 
@@ -51,11 +48,13 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Sign up',
+          "Sign up",
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: Sizes.size32),
+        padding: const EdgeInsets.symmetric(
+          horizontal: Sizes.size36,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -63,8 +62,8 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
             const Text(
               "When's your birthday?",
               style: TextStyle(
-                fontSize: Sizes.size20,
-                fontWeight: FontWeight.w600,
+                fontSize: Sizes.size24,
+                fontWeight: FontWeight.w700,
               ),
             ),
             Gaps.v8,
@@ -79,9 +78,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
             TextField(
               enabled: false,
               controller: _birthdayController,
-              cursorColor: Theme.of(context).primaryColor,
               decoration: InputDecoration(
-                fillColor: Colors.black,
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.grey.shade400,
@@ -93,29 +90,27 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
                   ),
                 ),
               ),
+              cursorColor: Theme.of(context).primaryColor,
             ),
-            Gaps.v16,
+            Gaps.v28,
             GestureDetector(
-              onTap: () => _onNextTap(),
-              child: const FormButton(
-                disabled: false,
-              ),
+              onTap: _onNextTap,
+              child: const FormButton(disabled: false),
             ),
           ],
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-          child: SizedBox(
-        height: 300,
-        child: CupertinoDatePicker(
-          initialDateTime:
-              DateTime.now().subtract(const Duration(days: 365 * 12)),
-          minimumYear: 1900,
-          maximumDate: DateTime.now().subtract(const Duration(days: 365 * 12)),
-          onDateTimeChanged: _setTextFieldDate,
-          mode: CupertinoDatePickerMode.date,
+        child: SizedBox(
+          height: 300,
+          child: CupertinoDatePicker(
+            maximumDate: initialDate,
+            initialDateTime: initialDate,
+            mode: CupertinoDatePickerMode.date,
+            onDateTimeChanged: _setTextFieldDate,
+          ),
         ),
-      )),
+      ),
     );
   }
 }

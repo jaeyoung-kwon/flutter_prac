@@ -4,10 +4,15 @@ import 'package:tiktok_flutter/constants/sizes.dart';
 import 'package:tiktok_flutter/features/inbox/activity_screen.dart';
 import 'package:tiktok_flutter/features/inbox/chats_screen.dart';
 
-class InboxScreen extends StatelessWidget {
+class InboxScreen extends StatefulWidget {
   const InboxScreen({super.key});
 
-  void _onDmPressed(BuildContext context) {
+  @override
+  State<InboxScreen> createState() => _InboxScreenState();
+}
+
+class _InboxScreenState extends State<InboxScreen> {
+  void _onDmPressed() {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => const ChatsScreen(),
@@ -15,7 +20,7 @@ class InboxScreen extends StatelessWidget {
     );
   }
 
-  void _onActivityTap(BuildContext context) {
+  void _onActivityTap() {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => const ActivityScreen(),
@@ -31,9 +36,10 @@ class InboxScreen extends StatelessWidget {
         title: const Text('Inbox'),
         actions: [
           IconButton(
-            onPressed: () => _onDmPressed(context),
+            onPressed: _onDmPressed,
             icon: const FaIcon(
               FontAwesomeIcons.paperPlane,
+              size: Sizes.size20,
             ),
           )
         ],
@@ -41,12 +47,12 @@ class InboxScreen extends StatelessWidget {
       body: ListView(
         children: [
           ListTile(
-            onTap: () => _onActivityTap(context),
+            onTap: _onActivityTap,
             title: const Text(
               'Activity',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
-                fontSize: Sizes.size14,
+                fontSize: Sizes.size16,
               ),
             ),
             trailing: const FaIcon(
@@ -77,13 +83,13 @@ class InboxScreen extends StatelessWidget {
               'New followers',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
-                fontSize: Sizes.size14,
+                fontSize: Sizes.size16,
               ),
             ),
             subtitle: const Text(
-              'Messages from followers will appear here',
+              'Messages from followers will appear here.',
               style: TextStyle(
-                fontSize: Sizes.size12,
+                fontSize: Sizes.size14,
               ),
             ),
             trailing: const FaIcon(

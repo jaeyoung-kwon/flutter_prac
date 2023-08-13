@@ -9,44 +9,38 @@ class VideoTimelineScreen extends StatefulWidget {
 }
 
 class _VideoTimelineScreenState extends State<VideoTimelineScreen> {
-  List<Color> colors = [
-    Colors.blue,
-    Colors.red,
-    Colors.teal,
-    Colors.yellow,
-  ];
-
-  final Duration _videoDuration = const Duration(milliseconds: 200);
-  final Curve _videoCurve = Curves.linear;
+  int _itemCount = 4;
 
   final PageController _pageController = PageController();
+
+  final Duration _scrollDuration = const Duration(milliseconds: 250);
+  final Curve _scrollCurve = Curves.linear;
 
   void _onPageChanged(int page) {
     _pageController.animateToPage(
       page,
-      duration: _videoDuration,
-      curve: _videoCurve,
+      duration: _scrollDuration,
+      curve: _scrollCurve,
     );
-    if (page == colors.length - 1) {
-      colors.addAll([
-        Colors.blue,
-        Colors.red,
-        Colors.teal,
-        Colors.yellow,
-      ]);
+    if (page == _itemCount - 1) {
+      _itemCount = _itemCount + 4;
       setState(() {});
     }
   }
 
+  void _onVideoFinished() {
+    return;
+  }
+
   @override
   void dispose() {
-    super.dispose();
     _pageController.dispose();
+    super.dispose();
   }
 
   Future<void> _onRefresh() {
     return Future.delayed(
-      const Duration(seconds: 3),
+      const Duration(seconds: 5),
     );
   }
 
@@ -54,16 +48,18 @@ class _VideoTimelineScreenState extends State<VideoTimelineScreen> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: _onRefresh,
+      displacement: 50,
       edgeOffset: 20,
       color: Theme.of(context).primaryColor,
       child: PageView.builder(
         controller: _pageController,
         scrollDirection: Axis.vertical,
         onPageChanged: _onPageChanged,
-        itemCount: colors.length,
-        itemBuilder: (context, index) {
-          return VideoPost(index: index);
-        },
+        itemCount: _itemCount,
+        itemBuilder: (context, index) => VideoPost(
+          onVideoFinished: _onVideoFinished,
+          index: index,
+        ),
       ),
     );
   }

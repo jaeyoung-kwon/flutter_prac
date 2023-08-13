@@ -14,17 +14,13 @@ class LoginFormScreen extends StatefulWidget {
 class _LoginFormScreenState extends State<LoginFormScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  Map<String, String> formData = {
-    'email': '',
-    'password': '',
-  };
+  Map<String, String> formData = {};
 
   void _onSubmitTap() {
     if (_formKey.currentState != null) {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
-        Navigator.pushAndRemoveUntil(
-          context,
+        Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => const InterestsScreen(),
           ),
@@ -38,9 +34,7 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Log in',
-        ),
+        title: const Text('Log in'),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(
@@ -52,32 +46,56 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
             children: [
               Gaps.v28,
               TextFormField(
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Email',
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.grey.shade400,
+                    ),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.grey.shade400,
+                    ),
+                  ),
                 ),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your email.';
+                  if (value != null && value.isEmpty) {
+                    return "Plase write your email";
                   }
                   return null;
                 },
-                onSaved: (newValue) => {
-                  if (newValue != null) {formData['email'] = newValue}
+                onSaved: (newValue) {
+                  if (newValue != null) {
+                    formData['email'] = newValue;
+                  }
                 },
               ),
               Gaps.v16,
               TextFormField(
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Password',
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.grey.shade400,
+                    ),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.grey.shade400,
+                    ),
+                  ),
                 ),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your password.';
+                  if (value != null && value.isEmpty) {
+                    return "Plase write your password";
                   }
                   return null;
                 },
-                onSaved: (newValue) => {
-                  if (newValue != null) {formData['password'] = newValue}
+                onSaved: (newValue) {
+                  if (newValue != null) {
+                    formData['password'] = newValue;
+                  }
                 },
               ),
               Gaps.v28,
