@@ -4,20 +4,26 @@ import 'package:go_router/go_router.dart';
 import 'package:tiktok_flutter/constants/gaps.dart';
 import 'package:tiktok_flutter/constants/sizes.dart';
 import 'package:tiktok_flutter/features/authentication/login_screen.dart';
+import 'package:tiktok_flutter/features/authentication/username_screen.dart';
 import 'package:tiktok_flutter/features/authentication/widgets/auth_button.dart';
 import 'package:tiktok_flutter/utils.dart';
 
 class SignUpScreen extends StatelessWidget {
-  static const routeName = "/";
+  static const routeURL = "/";
+  static const routeName = "signUp";
   const SignUpScreen({super.key});
 
   void _onLoginTap(BuildContext context) {
-    context.push(LoginScreen.routeName);
+    context.pushNamed(LoginScreen.routeName);
   }
 
   void _onEmailTap(BuildContext context) {
-    // context.push(EmailScreen.routeName);
-    context.push("/user/니꼬?show=likes");
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const UsernameScreen(),
+      ),
+    );
   }
 
   @override

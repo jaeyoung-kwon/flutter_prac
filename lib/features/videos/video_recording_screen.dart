@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tiktok_flutter/constants/gaps.dart';
@@ -6,6 +9,8 @@ import 'package:tiktok_flutter/constants/sizes.dart';
 import 'package:tiktok_flutter/features/videos/video_preview_screen.dart';
 
 class VideoRecordingScreen extends StatefulWidget {
+  static const String routeName = "postVideo";
+  static const String routeURL = "/upload";
   const VideoRecordingScreen({super.key});
 
   @override
@@ -16,6 +21,8 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
     with TickerProviderStateMixin, WidgetsBindingObserver {
   bool _hasPermission = false;
   bool _isSelfieMode = false;
+
+  late final bool _noCamera = kDebugMode && Platform.isIOS;
 
   late final AnimationController _buttonAnimationController =
       AnimationController(
@@ -73,7 +80,13 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
   @override
   void initState() {
     super.initState();
-    initPermission();
+    if (!_noCamera) {
+      initPermission();
+    } else {
+      setState(() {
+        _hasPermission = true;
+      });
+    }
     WidgetsBinding.instance.addObserver(this);
     _progressAnimationController.addListener(() {
       setState(() {});
@@ -132,12 +145,15 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
   void dispose() {
     _progressAnimationController.dispose();
     _buttonAnimationController.dispose();
-    _cameraController.dispose();
+    if (!_noCamera) {
+      _cameraController.dispose();
+    }
     super.dispose();
   }
 
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (_noCamera) return;
     if (!_hasPermission) return;
     if (state == AppLifecycleState.inactive) {
       if (!_cameraController.value.isRecordingVideo) return;
@@ -152,105 +168,110 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       body: _hasPermission
-          ? _cameraController.value.isInitialized
-              ? Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    CameraPreview(_cameraController),
-                    Positioned(
-                      top: Sizes.size20,
-                      right: Sizes.size20,
-                      child: Column(
+          ? Stack(
+              alignment: Alignment.center,
+              children: [
+                if (!_noCamera && _cameraController.value.isInitialized)
+                  CameraPreview(_cameraController),
+                const Positioned(
+                  top: Sizes.size40,
+                  left: Sizes.size20,
+                  child: CloseButton(
+                    color: Colors.white,
+                  ),
+                ),
+                if (!_noCamera)
+                  Positioned(
+                    top: Sizes.size20,
+                    right: Sizes.size20,
+                    child: Column(
+                      children: [
+                        IconButton(
+                          color: Colors.white,
+                          onPressed: _toggleSelfieMode,
+                          icon: const Icon(
+                            Icons.cameraswitch,
+                          ),
+                        ),
+                        Gaps.v10,
+                        IconButton(
+                          color: _flashMode == FlashMode.off
+                              ? Colors.amber.shade200
+                              : Colors.white,
+                          onPressed: () => _setFlashMode(FlashMode.off),
+                          icon: const Icon(
+                            Icons.flash_off_rounded,
+                          ),
+                        ),
+                        Gaps.v10,
+                        IconButton(
+                          color: _flashMode == FlashMode.always
+                              ? Colors.amber.shade200
+                              : Colors.white,
+                          onPressed: () => _setFlashMode(FlashMode.always),
+                          icon: const Icon(
+                            Icons.flash_on_rounded,
+                          ),
+                        ),
+                        Gaps.v10,
+                        IconButton(
+                          color: _flashMode == FlashMode.auto
+                              ? Colors.amber.shade200
+                              : Colors.white,
+                          onPressed: () => _setFlashMode(FlashMode.auto),
+                          icon: const Icon(
+                            Icons.flash_auto_rounded,
+                          ),
+                        ),
+                        Gaps.v10,
+                        IconButton(
+                          color: _flashMode == FlashMode.torch
+                              ? Colors.amber.shade200
+                              : Colors.white,
+                          onPressed: () => _setFlashMode(FlashMode.torch),
+                          icon: const Icon(
+                            Icons.flashlight_on_rounded,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                Positioned(
+                  bottom: 0,
+                  child: GestureDetector(
+                    onTapDown: (details) => _onStartRecording(),
+                    onTapUp: (details) => _onStopRecording(),
+                    child: ScaleTransition(
+                      scale: _buttonAnimation,
+                      child: Stack(
+                        alignment: Alignment.center,
                         children: [
-                          IconButton(
-                            color: Colors.white,
-                            onPressed: _toggleSelfieMode,
-                            icon: const Icon(
-                              Icons.cameraswitch,
+                          SizedBox(
+                            width: Sizes.size80 + Sizes.size16,
+                            height: Sizes.size80 + Sizes.size16,
+                            child: CircularProgressIndicator(
+                              color: Colors.red.shade400,
+                              strokeWidth: Sizes.size6,
+                              value: _progressAnimationController.value,
                             ),
                           ),
-                          Gaps.v10,
-                          IconButton(
-                            color: _flashMode == FlashMode.off
-                                ? Colors.amber.shade200
-                                : Colors.white,
-                            onPressed: () => _setFlashMode(FlashMode.off),
-                            icon: const Icon(
-                              Icons.flash_off_rounded,
+                          Container(
+                            width: Sizes.size80,
+                            height: Sizes.size80,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.red.shade400,
                             ),
-                          ),
-                          Gaps.v10,
-                          IconButton(
-                            color: _flashMode == FlashMode.always
-                                ? Colors.amber.shade200
-                                : Colors.white,
-                            onPressed: () => _setFlashMode(FlashMode.always),
-                            icon: const Icon(
-                              Icons.flash_on_rounded,
-                            ),
-                          ),
-                          Gaps.v10,
-                          IconButton(
-                            color: _flashMode == FlashMode.auto
-                                ? Colors.amber.shade200
-                                : Colors.white,
-                            onPressed: () => _setFlashMode(FlashMode.auto),
-                            icon: const Icon(
-                              Icons.flash_auto_rounded,
-                            ),
-                          ),
-                          Gaps.v10,
-                          IconButton(
-                            color: _flashMode == FlashMode.torch
-                                ? Colors.amber.shade200
-                                : Colors.white,
-                            onPressed: () => _setFlashMode(FlashMode.torch),
-                            icon: const Icon(
-                              Icons.flashlight_on_rounded,
-                            ),
-                          ),
+                          )
                         ],
                       ),
                     ),
-                    Positioned(
-                      bottom: 0,
-                      child: GestureDetector(
-                        onTapDown: (details) => _onStartRecording(),
-                        onTapUp: (details) => _onStopRecording(),
-                        child: ScaleTransition(
-                          scale: _buttonAnimation,
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              SizedBox(
-                                width: Sizes.size80 + Sizes.size16,
-                                height: Sizes.size80 + Sizes.size16,
-                                child: CircularProgressIndicator(
-                                  color: Colors.red.shade400,
-                                  strokeWidth: Sizes.size6,
-                                  value: _progressAnimationController.value,
-                                ),
-                              ),
-                              Container(
-                                width: Sizes.size80,
-                                height: Sizes.size80,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.red.shade400,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
+                  ),
                 )
-              : const Center(
-                  child: CircularProgressIndicator(),
-                )
+              ],
+            )
           : const Center(
-              child: Text("Permission Denied"),
+              child: CircularProgressIndicator(),
             ),
     );
   }
