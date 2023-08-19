@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "40088204340",
+    "project_id": "tiktiktoktok-prac-abc",
+    "storage_bucket": "tiktiktoktok-prac-abc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:40088204340:android:79f4f55d30f77d0c188661",
+        "android_client_info": {
+          "package_name": "com.example.tiktok_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "40088204340-9141s6viecnng8ek8i0u3iefln9tk23o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVwqHlqenhrgYdDfDeGQ8AoQzEG7xh1F8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "40088204340-9141s6viecnng8ek8i0u3iefln9tk23o.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "40088204340-qj3258ob8ehh1o3quob89lkejich9gp2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.tiktokFlutter"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
