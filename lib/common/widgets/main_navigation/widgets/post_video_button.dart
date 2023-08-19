@@ -4,12 +4,9 @@ import 'package:tiktok_flutter/constants/sizes.dart';
 import 'package:tiktok_flutter/utils.dart';
 
 class PostVideoButton extends StatelessWidget {
-  const PostVideoButton({
-    super.key,
-    required this.isSelectedMainIndex,
-  });
+  const PostVideoButton({super.key, required this.inverted});
 
-  final bool isSelectedMainIndex;
+  final bool inverted;
 
   @override
   Widget build(BuildContext context) {
@@ -18,48 +15,53 @@ class PostVideoButton extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         Positioned(
-          right: Sizes.size20,
+          right: 20,
           child: Container(
-            height: Sizes.size32,
-            width: Sizes.size24,
+            height: 30,
+            width: 25,
             padding: const EdgeInsets.symmetric(
               horizontal: Sizes.size8,
             ),
             decoration: BoxDecoration(
-              color: const Color(0xFF61D4F0),
-              borderRadius: BorderRadius.circular(Sizes.size10),
+              color: const Color(0xff61D4F0),
+              borderRadius: BorderRadius.circular(
+                Sizes.size8,
+              ),
             ),
           ),
         ),
         Positioned(
-          left: Sizes.size20,
+          left: 20,
           child: Container(
-            height: Sizes.size32,
-            width: Sizes.size24,
+            height: 30,
+            width: 25,
             padding: const EdgeInsets.symmetric(
               horizontal: Sizes.size8,
             ),
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.circular(Sizes.size10),
+              borderRadius: BorderRadius.circular(
+                Sizes.size8,
+              ),
             ),
           ),
         ),
         Container(
-          height: Sizes.size32,
+          height: 30,
           padding: const EdgeInsets.symmetric(
-            horizontal: Sizes.size10,
+            horizontal: Sizes.size12,
           ),
           decoration: BoxDecoration(
-            color: isSelectedMainIndex || isDark ? Colors.white : Colors.black,
-            borderRadius: BorderRadius.circular(Sizes.size10),
+            color: !inverted || isDark ? Colors.white : Colors.black,
+            borderRadius: BorderRadius.circular(
+              Sizes.size6,
+            ),
           ),
           child: Center(
             child: FaIcon(
               FontAwesomeIcons.plus,
-              color:
-                  isSelectedMainIndex || isDark ? Colors.black : Colors.white,
-              size: Sizes.size20,
+              color: !inverted || isDark ? Colors.black : Colors.white,
+              size: 18,
             ),
           ),
         )

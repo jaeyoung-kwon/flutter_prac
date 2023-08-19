@@ -28,11 +28,11 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       TextEditingController(text: "Initial Text");
 
   void _onSearchChanged(String value) {
-    print("Searching form $value");
+    //print("Searching form $value");
   }
 
   void _onSearchSubmitted(String value) {
-    print("Submitted $value");
+    //print("Submitted $value");
   }
 
   @override
@@ -52,7 +52,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           elevation: 1,
           title: ConstrainedBox(
             constraints: const BoxConstraints(
-              maxWidth: BreakPoints.sm,
+              maxWidth: Breakpoints.sm,
             ),
             child: CupertinoSearchTextField(
               controller: _textEditingController,
@@ -90,7 +90,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                 Sizes.size10,
               ),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: width > BreakPoints.lg ? 5 : 2,
+                crossAxisCount: width > Breakpoints.lg ? 5 : 2,
                 crossAxisSpacing: Sizes.size10,
                 mainAxisSpacing: Sizes.size10,
                 childAspectRatio: 9 / 20,
@@ -121,6 +121,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                       style: TextStyle(
                         fontSize: Sizes.size16 + Sizes.size2,
                         fontWeight: FontWeight.bold,
+                        height: 1.1,
                       ),
                     ),
                     Gaps.v8,
