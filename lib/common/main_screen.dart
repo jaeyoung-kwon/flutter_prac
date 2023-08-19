@@ -8,9 +8,9 @@ import 'package:tiktok_flutter/features/inbox/inbox_screen.dart';
 import 'package:tiktok_flutter/common/widgets/navigation_tab.dart';
 import 'package:tiktok_flutter/common/widgets/post_video_button.dart';
 import 'package:tiktok_flutter/features/users/user_profile_screen.dart';
-import 'package:tiktok_flutter/features/videos/video_recording_screen.dart';
+import 'package:tiktok_flutter/features/videos/views/video_recording_screen.dart';
+import 'package:tiktok_flutter/features/videos/views/video_timeline_screen.dart';
 import 'package:tiktok_flutter/utils.dart';
-import 'package:tiktok_flutter/features/videos/video_timeline_screen.dart';
 
 class MainScreen extends StatefulWidget {
   final String tab;

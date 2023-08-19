@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tiktok_flutter/constants/gaps.dart';
 import 'package:tiktok_flutter/constants/sizes.dart';
-import 'package:tiktok_flutter/features/videos/video_preview_screen.dart';
+import 'package:tiktok_flutter/features/videos/views/video_preview_screen.dart';
 
 class VideoRecordingScreen extends StatefulWidget {
   static const String routeName = "postVideo";
