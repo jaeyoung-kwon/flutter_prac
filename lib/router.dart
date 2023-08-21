@@ -13,6 +13,7 @@ import 'package:tiktok_flutter/features/videos/views/video_recording_screen.dart
 
 final routerProvider = Provider(
   (ref) {
+    ref.watch(authStateStream);
     return GoRouter(
       initialLocation: "/inbox",
       redirect: (context, state) {
