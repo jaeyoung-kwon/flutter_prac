@@ -50,7 +50,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
   void _onChatTap(int index) {
     context.pushNamed(
       ChatDetailScreen.routeName,
-      pathParameters: {"chatId": "$index"},
+      params: {"chatId": "$index"},
     );
   }
 
